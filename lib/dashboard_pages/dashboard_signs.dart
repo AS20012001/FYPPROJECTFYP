@@ -3,6 +3,8 @@ import '/authentication/Signup_As_Drivers.dart';
 import '/authentication/Signup_As_User.dart';
 
 class DashboardPages extends StatefulWidget {
+
+
   @override
   State<DashboardPages> createState() => _DashboardPagesState();
 }
@@ -17,12 +19,15 @@ class _DashboardPagesState extends State<DashboardPages> {
           padding: const EdgeInsets.all(27.0),
           child: Column(
             children: [
-              const SizedBox(height: 40),
+
+              const SizedBox(height:40,),
+
               Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Image.asset("images/image.jpg", height: 170),
+                padding:const EdgeInsets.all(20.0),
+                child:Image.asset("images/image.jpg",height: 170),
               ),
-              SizedBox(height: 20),
+
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -39,16 +44,16 @@ class _DashboardPagesState extends State<DashboardPages> {
                       child: const Text(
                         'Signup as a Driver',
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
+                          color: Colors.black,
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -60,14 +65,13 @@ class _DashboardPagesState extends State<DashboardPages> {
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.blue,
-                        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                       ),
                       child: const Text(
                         'Signup as a User',
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.normal,
+                          color: Colors.black,
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),

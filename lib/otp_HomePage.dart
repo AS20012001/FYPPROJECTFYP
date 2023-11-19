@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '/MyDrawer.dart';
+import '/maindrawer.dart';
 import 'package:get/get.dart';
 import 'login_screen.dart'; // Import the LoginPage widget here
 
@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      drawer: MyDrawer(),
+      drawer: MainDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
