@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
+import '/MyDrawer.dart';
+import '/Rides/ChatPage.dart';
+import '/Rides/Logout.dart';
+import '/main.dart';
 import 'package:intl/intl.dart';
+import '/CommonDrawer.dart';
+import '/Profile/ProfilePage.dart';
+import '/Rides/Ratings.dart';
+import '/Rides/Ride.dart';
+import '/Rides/User.dart';
+import '/CommonDrawer.dart';
+
 
 class PostTripForDrivers extends StatefulWidget {
   const PostTripForDrivers({super.key});
 
   @override
   State<PostTripForDrivers> createState() => _PostTripForDriversState();
-
-
 }
 
 class _PostTripForDriversState extends State<PostTripForDrivers> {
+
+  final CommonDrawer commonDrawer = CommonDrawer();
 
   TextEditingController destinationcityTextEditingController = TextEditingController();
   TextEditingController startinglocTextEditingController = TextEditingController();
@@ -55,13 +66,16 @@ class _PostTripForDriversState extends State<PostTripForDrivers> {
   }
 
 
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      backgroundColor: Colors.white54,
-      body:
-      SingleChildScrollView(
+      appBar: AppBar(
+        title: Text("Post A Trip For Drivers"),
+      ),
+      drawer: commonDrawer.build(context),
+
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(27.0),
           child:Column (
@@ -285,7 +299,7 @@ class _PostTripForDriversState extends State<PostTripForDrivers> {
                   child: const Text(
                     "Submit",
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontSize: 18,
                     ),
                   ),
