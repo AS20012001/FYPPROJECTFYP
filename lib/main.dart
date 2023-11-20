@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           actionTextColor: Colors.white,
         ),
       ),
-      darkTheme: ThemeData.dark(),
+      darkTheme: ThemeData.light(),
       themeMode: ThemeMode.system,
       home: MySplashScreen(),
     );

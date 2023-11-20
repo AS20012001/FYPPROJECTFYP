@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../MyDrawer.dart';
 import '../otp_HomePage.dart';
 import '../authentication/Signup_As_Drivers.dart';
 import '../login_screen.dart';
@@ -23,7 +24,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
 
         if (snapshot.exists) {
           // User document exists in Firestore, redirect to HomePage.
-          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => MyDrawer()));
         } else {
           // User document does not exist, redirect to SignUpScreen.
           Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen()));

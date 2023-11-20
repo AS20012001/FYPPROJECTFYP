@@ -1,5 +1,6 @@
 import '/authentication/Signup_As_Drivers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'MyDrawer.dart';
 import 'otp_HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -53,7 +54,7 @@ class _OtpPageState extends State<OtpPage> {
         DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).get();
 
         if (userDoc.exists) {
-          Get.to(HomePage());
+          Get.to(MyDrawer());
           // Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => HomePage()));
         } else {
           Get.to(SignUpScreen());

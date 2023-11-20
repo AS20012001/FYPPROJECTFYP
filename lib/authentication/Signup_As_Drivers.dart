@@ -1,3 +1,4 @@
+import 'package:drivetogether/MyDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -393,7 +394,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         await Future.delayed(Duration(seconds: 3));
 
                         // Navigate to HomePage after 3 seconds
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => HomePage()));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (c) => MyDrawer()));
                       }
                     },
                     style: ElevatedButton.styleFrom(

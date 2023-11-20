@@ -37,7 +37,7 @@ class _RidepageState extends State<Ridepage> {
 
         Padding(
         padding:const EdgeInsets.all(6.0),
-        child:Image.asset("images/image.jpg",height: 100),
+        // child:Image.asset("images/image.jpg",height: 100),
         ),
 
         const SizedBox(height:20),
@@ -96,7 +96,7 @@ class RideCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
 
-          Image.asset("images/img.jpeg",height: 100),
+          // Image.asset("images/img.jpeg",height: 100),
 
           ListTile(
             title: Text('Driver: $DriverName'),
