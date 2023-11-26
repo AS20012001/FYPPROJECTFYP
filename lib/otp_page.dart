@@ -51,7 +51,7 @@ class _OtpPageState extends State<OtpPage> {
       if (user != null) {
         // Check if a document exists for the user in the "userId" collection.
         // String? uid = FirebaseAuth.instance.currentUser?.uid;
-        DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).get();
+        DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('drivers').doc(FirebaseAuth.instance.currentUser?.uid).get();
 
         if (userDoc.exists) {
           Get.to(MyDrawer());

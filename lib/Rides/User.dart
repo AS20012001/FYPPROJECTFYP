@@ -73,7 +73,7 @@ class UserProfileCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Image.asset("images/img.jpeg", height: 130),
+          Image.asset("images/image.jpg", height: 130),
           ListTile(
             title: Text(
               'User Profile',

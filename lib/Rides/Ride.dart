@@ -37,7 +37,8 @@ class _RidepageState extends State<Ridepage> {
 
         Padding(
         padding:const EdgeInsets.all(6.0),
-        // child:Image.asset("images/image.jpg",height: 100),
+        child: CircleAvatar(radius:60, child
+            : Image.asset("images/profille.jpg")),
         ),
 
         const SizedBox(height:20),

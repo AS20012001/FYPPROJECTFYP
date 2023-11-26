@@ -41,9 +41,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> saveUserDataToFirestore(String userId, String imageUrl) async {
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    CollectionReference drivers = FirebaseFirestore.instance.collection('drivers');
 
-    await users.doc(userId).set({
+    await drivers.doc(userId).set({
       'name': nameTextEditingController.text,
       'email': emailTextEditingController.text,
       'cnic': cnicTextEditingController.text,
@@ -66,7 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final firebase_storage.Reference storageReference =
         firebase_storage.FirebaseStorage.instance
             .ref()
-            .child('users') // Change 'user_images' to 'users'
+            .child('drivers') // Change 'user_images' to 'drivers'
             .child('${getCurrentUserId()}.jpg');
 
     final firebase_storage.UploadTask uploadTask =

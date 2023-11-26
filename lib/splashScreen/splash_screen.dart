@@ -20,7 +20,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
 
       if (user != null) {
         // If the user is authenticated, check for the Firestore document
-        final snapshot = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+        final snapshot = await FirebaseFirestore.instance.collection('drivers').doc(user.uid).get();
 
         if (snapshot.exists) {
           // User document exists in Firestore, redirect to HomePage.

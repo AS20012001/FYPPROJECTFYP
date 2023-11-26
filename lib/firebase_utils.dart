@@ -18,10 +18,10 @@ class UserData {
 
 Future<UserData> getUserDataFromFirestore(String userId) async {
   UserData userData = UserData();
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference drivers = FirebaseFirestore.instance.collection('drivers');
 
   try {
-    DocumentSnapshot userDoc = await users.doc(userId).get();
+    DocumentSnapshot userDoc = await drivers.doc(userId).get();
 
     if (userDoc.exists) {
       Map<String, dynamic>? data = userDoc.data() as Map<String, dynamic>?;
@@ -36,7 +36,7 @@ Future<UserData> getUserDataFromFirestore(String userId) async {
       final firebase_storage.Reference storageReference =
       firebase_storage.FirebaseStorage.instance
           .ref()
-          .child('users') // Change to your storage folder name
+          .child('drivers') // Change to your storage folder name
           .child('$userId.jpg');
 
       userData.imageUrl = await storageReference.getDownloadURL();
