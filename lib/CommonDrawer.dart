@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Wheretogo.dart';
 import 'firebase_utils.dart'; // Import your utility functions and classes
 import 'package:flutter/material.dart';
 import '/HomePage.dart';
@@ -103,7 +104,7 @@ class CommonDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.push(
-                        context, MaterialPageRoute(builder: (c) => Ridepage()));
+                        context, MaterialPageRoute(builder: (c) => Ridepage(date: '', destination: '',)));
                   },
                 ),
                 ListTile(
@@ -138,9 +139,18 @@ class CommonDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.push(
-                        context, MaterialPageRoute(builder: (c) => Logout()));
+                        context, MaterialPageRoute(builder: (c) => WhereToGo()));
                   },
-                )
+                ),
+                ListTile(
+                  title: Text("Active Rides", style: TextStyle(fontSize: 17)),
+                  leading: Icon(Icons.logout),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (c) => WhereToGo()));
+                  },
+                ),
                 // ... add other ListTiles as needed
               ],
             );

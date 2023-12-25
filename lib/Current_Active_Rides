@@ -1,70 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_auth/firebase_auth.dart';
 
-import '../bookride.dart';
-
-class Ridepage extends StatefulWidget {
-  final String destination;
-  final String date;
-
-  Ridepage({required this.destination, required this.date});
-
+class CurrentActiveRidesPage extends StatefulWidget {
   @override
-  _RidepageState createState() => _RidepageState();
+  _CurrentActiveRidesPageState createState() => _CurrentActiveRidesPageState();
 }
 
-class _RidepageState extends State<Ridepage> {
-  late List<Map<String, dynamic>> rides = [];
+class _CurrentActiveRidesPageState extends State<CurrentActiveRidesPage> {
+  late List<Map<String, dynamic>> activeRides = [];
 
   @override
   void initState() {
     super.initState();
-    fetchTrips();
+    fetchActiveRides();
   }
 
-  Future<void> fetchTrips() async {
-    CollectionReference driverTrips = FirebaseFirestore.instance.collection('DriverTrips');
+  Future<void> fetchActiveRides() async {
+    String? currentUserId = await getCurrentUserId();
 
-    QuerySnapshot querySnapshot = await driverTrips
-        .where('destinationCity', isEqualTo: widget.destination)
-        .where('date', isEqualTo: widget.date)
-        .get();
+    if (currentUserId != null) {
+      CollectionReference driverTrips = FirebaseFirestore.instance.collection('DriverTrips');
 
-    List<Map<String, dynamic>> ridesList = [];
+      QuerySnapshot querySnapshot = await driverTrips
+          .where('User 1 ID', isEqualTo: currentUserId)
+          .orWhere('User 2 ID', isEqualTo: currentUserId)
+          .orWhere('User 3 ID', isEqualTo: currentUserId)
+          .get();
 
-    for (QueryDocumentSnapshot tripSnapshot in querySnapshot.docs) {
-      var tripData = tripSnapshot.data();
+      List<Map<String, dynamic>> ridesList = [];
 
-      if (tripData != null && tripData is Map<String, dynamic>) {
-        var postuserId = tripData['postuserId'];
+      for (QueryDocumentSnapshot tripSnapshot in querySnapshot.docs) {
+        var tripData = tripSnapshot.data();
 
-        DocumentSnapshot driverSnapshot = await FirebaseFirestore.instance.collection('drivers').doc(postuserId).get();
-        var driverData = driverSnapshot.data();
+        if (tripData != null && tripData is Map<String, dynamic>) {
+          var postUserId = tripData['postuserId'];
 
-        if (driverData != null && driverData is Map<String, dynamic>) {
-          var imageUrl = await fetchDriverImage(postuserId);
+          DocumentSnapshot driverSnapshot =
+              await FirebaseFirestore.instance.collection('drivers').doc(postUserId).get();
+          var driverData = driverSnapshot.data();
 
-          ridesList.add({
-            'documentId': tripSnapshot.id,
-            'Destination': tripData['destinationCity'],
-            'StartLocation': tripData['startingLocation'],
-            'Day': tripData['date'],
-            'Time': tripData['time'],
-            'NumberOfSeats': tripData['seats'],
-            'PricePerSeat': double.parse(tripData['pricePerSeat'].toString()),
-            'DriverName': driverData['name'],
-            'Rating': driverData['rating'],
-            'CarColor': driverData['carColor'],
-            'DriverImage': imageUrl,
-          });
+          if (driverData != null && driverData is Map<String, dynamic>) {
+            var imageUrl = await fetchDriverImage(postUserId);
+
+            ridesList.add({
+              'documentId': tripSnapshot.id,
+              'Destination': tripData['destinationCity'],
+              'StartLocation': tripData['startingLocation'],
+              'Day': tripData['date'],
+              'Time': tripData['time'],
+              'NumberOfSeats': tripData['seats'],
+              'PricePerSeat': double.parse(tripData['pricePerSeat'].toString()),
+              'DriverName': driverData['name'],
+              'Rating': driverData['rating'],
+              'CarColor': driverData['carColor'],
+              'DriverImage': imageUrl,
+            });
+          }
         }
       }
-    }
 
-    setState(() {
-      rides = ridesList;
-    });
+      setState(() {
+        activeRides = ridesList;
+      });
+    }
   }
 
   Future<String> fetchDriverImage(String userId) async {
@@ -79,20 +79,31 @@ class _RidepageState extends State<Ridepage> {
     }
   }
 
+  Future<String?> getCurrentUserId() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+
+    if (user != null) {
+      return user.uid;
+    }
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ride Profile"),
+        title: Text("Current Active Rides"),
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: 0, left: 30, right: 30, bottom: 30),
+          padding: EdgeInsets.all(16.0),
           child: Column(
             children: [
               const SizedBox(height: 20),
-              for (var ride in rides)
+              for (var ride in activeRides)
                 ExtendedRideCard(
                   documentId: ride['documentId'],
                   Destination: ride['Destination'],
@@ -106,21 +117,12 @@ class _RidepageState extends State<Ridepage> {
                   CarColor: ride['CarColor'],
                   DriverImage: ride['DriverImage'],
                   onPressed: () {
-                    _navigateToBookRidePage(ride);
+                    // Handle tap on active ride card
                   },
                 ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  void _navigateToBookRidePage(Map<String, dynamic> rideDetails) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BookRidePage(rideDetails: rideDetails),
       ),
     );
   }
@@ -226,4 +228,10 @@ class ExtendedRideCard extends StatelessWidget {
       ),
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: CurrentActiveRidesPage(),
+  ));
 }

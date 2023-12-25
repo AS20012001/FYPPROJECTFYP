@@ -151,23 +151,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
 
-            const SizedBox(height: 17),
-
-            // Display user phone number
-            Row(
-              children: [
-                Icon(Icons.phone, color: Colors.black),
-                SizedBox(width: 8),
-                Text(
-                  'Phone: ${userData.phone}',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-
             const SizedBox(height: 20),
 
             // Button for signing out

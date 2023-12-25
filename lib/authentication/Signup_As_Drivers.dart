@@ -51,6 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       'carModel': CarModelTextEditingController.text,
       'carNumber': CarNumberTextEditingController.text,
       'carColor': CarColorTextEditingController.text,
+      'rating': 5,
     });
   }
 

@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
-import '/MyDrawer.dart';
-import '/Rides/ChatPage.dart';
-import '/Rides/Logout.dart';
-import '/main.dart';
+import '../firebase_utils.dart';
 import 'package:intl/intl.dart';
 import '/CommonDrawer.dart';
-import '/Profile/ProfilePage.dart';
-import '/Rides/Ratings.dart';
-import '/Rides/Ride.dart';
-import '/Rides/User.dart';
-import '/CommonDrawer.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostTripForDrivers extends StatefulWidget {
   const PostTripForDrivers({super.key});
@@ -65,7 +57,76 @@ class _PostTripForDriversState extends State<PostTripForDrivers> {
     }
   }
 
+  int _convertToInt(String value) {
+    // Use int.tryParse to safely convert the string to an integer
+    // Return 0 if the conversion fails
+    return int.tryParse(value) ?? 0;
+  }
 
+
+  Future<void> _submitForm() async {
+    // Validate form entries before submitting
+    if (_validateForm()) {
+      // Get a reference to the "DriverTrips" collection
+      CollectionReference driverTrips = FirebaseFirestore.instance.collection('DriverTrips');
+
+      // Generate a new document with a random ID
+      DocumentReference newTripRef = driverTrips.doc();
+
+      // Get the current user's ID (you can replace this with the appropriate user ID)
+      String userId = getCurrentUserId();
+
+      // Save the trip details to Firestore
+      await newTripRef.set({
+        'postuserId': userId,
+        'destinationCity': destinationcityTextEditingController.text.toLowerCase(),
+        'startingLocation': startinglocTextEditingController.text,
+        'date': dateTextEditingController.text,
+        'time': timeTextEditingController.text,
+        'seats': _convertToInt(seatsTextEditingController.text),
+        'pricePerSeat': priceTextEditingController.text,
+      });
+
+      // Optionally, you can clear the form fields after submitting
+      _clearForm();
+
+      // Display a success message or navigate to another screen
+      // For example, you can show a SnackBar with a success message:
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Trip submitted successfully!"),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  // Validate form entries
+  bool _validateForm() {
+    // Add your validation logic here
+    // Return true if the form is valid, otherwise false
+    return true;
+  }
+
+  // Clear form fields after submission
+  void _clearForm() {
+    destinationcityTextEditingController.clear();
+    startinglocTextEditingController.clear();
+    dateTextEditingController.clear();
+    timeTextEditingController.clear();
+    seatsTextEditingController.clear();
+    priceTextEditingController.clear();
+  }
+
+
+
+
+
+
+
+
+
+  final _formKeynew = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -78,234 +139,274 @@ class _PostTripForDriversState extends State<PostTripForDrivers> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(27.0),
-          child:Column (
-            children: [
-              const SizedBox(height:20),
+          child:Form(
+            key: _formKeynew,
+            child: Column (
+              children: [
+                const SizedBox(height:20),
 
-              Padding(
-                padding:const EdgeInsets.all(20.0),
-                child:Image.asset("images/image.jpg",height: 120),
+                Padding(
+                  padding:const EdgeInsets.all(20.0),
+                  child:Image.asset("images/image.jpg",height: 120),
 
-              ),
-
-              const SizedBox(height:20,),
-
-              const Text(
-                "Post A Trip for Drivers",
-                style:TextStyle(
-                  fontSize: 25,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
                 ),
-              ),
 
-              const SizedBox(height:10,),
+                const SizedBox(height:20,),
 
-              const SizedBox(height:17),
-
-              TextField(
-                controller: destinationcityTextEditingController,
-                style: const TextStyle(
-                  color: Colors.black,
-                ),
-                decoration: InputDecoration(
-                  labelText: "Destination City",
-
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color:Colors.black),
-                  ),
-
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-
-
-                  labelStyle: const TextStyle(
+                const Text(
+                  "Post A Trip for Drivers",
+                  style:TextStyle(
+                    fontSize: 25,
                     color: Colors.black,
-                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
 
-              ),
+                const SizedBox(height:10,),
 
-              const SizedBox(height:17),
+                const SizedBox(height:17),
 
-              TextField(
-                controller: startinglocTextEditingController,
-                style: const TextStyle(
-                  color: Colors.black,
-                ),
-                decoration: InputDecoration(
-                  labelText: "Starting location",
-
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color:Colors.black),
-                  ),
-
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-
-                  labelStyle: const TextStyle(
+                TextFormField(
+                  controller: destinationcityTextEditingController,
+                  style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 13,
                   ),
-                ),
+                  decoration: InputDecoration(
+                    labelText: "Destination City",
 
-              ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color:Colors.black),
+                    ),
 
-              const SizedBox(height:17),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
 
 
-              TextField(
-                controller: dateTextEditingController,
-                keyboardType: TextInputType.text,
-                style: const TextStyle(
-                    color: Colors.black
-                ),
-                decoration: InputDecoration(
-                  labelText: "Pick A Date",
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color:Colors.black),
+                    labelStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 13,
+                    ),
                   ),
-
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-
-                  labelStyle: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 13,
-                  ),
-                ),
-                onTap: () {
-                  _selectDate(context);
-                },
-              ),
-
-              const SizedBox(height:17),
-
-              TextField(
-                controller: timeTextEditingController,
-                keyboardType: TextInputType.datetime,
-                style: const TextStyle(
-                  color: Colors.black,
-                ),
-                decoration: InputDecoration(
-                  labelText: "Time",
-
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color:Colors.black),
-                  ),
-
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-
-
-                  labelStyle: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 13,
-                  ),
-                ),
-                onTap: () {
-                  _selectTime(context);
-                },
-              ),
-
-              const SizedBox(height:17),
-
-              TextField(
-                controller: seatsTextEditingController,
-                keyboardType: TextInputType.text,
-                style: const TextStyle(
-                    color: Colors.black
-                ),
-                decoration: InputDecoration(
-                  labelText: "Number of Seat",
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color:Colors.black),
-                  ),
-
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-
-
-                  labelStyle: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 13,
-                  ),
-                ),
-
-              ),
-
-              const SizedBox(height:17),
-
-              TextField(
-                controller: priceTextEditingController,
-                keyboardType: TextInputType.number,
-                style: const TextStyle(
-                    color: Colors.black
-                ),
-                decoration: InputDecoration(
-                  labelText: "Price per Seat",
-
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color:Colors.black),
-                  ),
-
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-
-                  labelStyle:const TextStyle(
-                    color: Colors.black,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-
-
-              const SizedBox(height: 20),
-
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: ElevatedButton(
-                  onPressed: () {
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your destination';
+                    }
+                    return null;
                   },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.blue,
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+
+                ),
+
+                const SizedBox(height:17),
+
+                TextFormField(
+                  controller: startinglocTextEditingController,
+                  style: const TextStyle(
+                    color: Colors.black,
                   ),
-                  child: const Text(
-                    "Submit",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
+                  decoration: InputDecoration(
+                    labelText: "Starting location",
+
+                    contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color:Colors.black),
+                    ),
+
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+
+                    labelStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 13,
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your starting location';
+                    }
+                    return null;
+                  },
+
+                ),
+
+                const SizedBox(height:17),
+
+
+                TextFormField(
+                  controller: dateTextEditingController,
+                  keyboardType: TextInputType.text,
+                  style: const TextStyle(
+                      color: Colors.black
+                  ),
+                  decoration: InputDecoration(
+                    labelText: "Pick A Date",
+                    contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color:Colors.black),
+                    ),
+
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+
+                    labelStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 13,
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the date';
+                    }
+                    return null;
+                  },
+
+                  onTap: () {
+                    _selectDate(context);
+                  },
+                ),
+
+                const SizedBox(height:17),
+
+                TextFormField(
+                  controller: timeTextEditingController,
+                  keyboardType: TextInputType.datetime,
+                  style: const TextStyle(
+                    color: Colors.black,
+                  ),
+                  decoration: InputDecoration(
+                    labelText: "Time",
+
+                    contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color:Colors.black),
+                    ),
+
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+
+
+                    labelStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 13,
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a time';
+                    }
+                    return null;
+                  },
+                  onTap: () {
+                    _selectTime(context);
+                  },
+                ),
+
+                const SizedBox(height:17),
+
+                TextFormField(
+                  controller: seatsTextEditingController,
+                  keyboardType: TextInputType.number,
+                  style: const TextStyle(
+                      color: Colors.black
+                  ),
+                  decoration: InputDecoration(
+                    labelText: "Number of Seat",
+                    contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color:Colors.black),
+                    ),
+
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+
+
+                    labelStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 13,
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter number of seats available';
+                    }
+                    return null;
+                  },
+
+                ),
+
+                const SizedBox(height:17),
+
+                TextFormField(
+                  controller: priceTextEditingController,
+                  keyboardType: TextInputType.number,
+                  style: const TextStyle(
+                      color: Colors.black
+                  ),
+                  decoration: InputDecoration(
+                    labelText: "Price per Seat",
+
+                    contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color:Colors.black),
+                    ),
+
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+
+                    labelStyle:const TextStyle(
+                      color: Colors.black,
+                      fontSize: 13,
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the price per seat';
+                    }
+                    return null;
+                  },
+                ),
+
+                
+
+                const SizedBox(height: 20),
+
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: ElevatedButton(
+                    onPressed: _submitForm,
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue,
+                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                    ),
+                    child: const Text(
+                      "Submit",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
