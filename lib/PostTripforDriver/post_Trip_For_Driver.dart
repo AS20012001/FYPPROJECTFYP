@@ -76,6 +76,20 @@ class _PostTripForDriversState extends State<PostTripForDrivers> {
       // Get the current user's ID (you can replace this with the appropriate user ID)
       String userId = getCurrentUserId();
 
+      DocumentSnapshot<Map<String, dynamic>> driverSnapshot = await FirebaseFirestore.instance.collection('drivers').doc(getCurrentUserId()).get();
+
+      String driverName = "";
+      String driveImg = "";
+      String drivercarcolor = "";
+      int driverrating = 1;
+
+      if(driverSnapshot.data() != null){
+        driverName = driverSnapshot.data()!["name"];
+        driveImg = driverSnapshot.data()!["img_url"];
+        drivercarcolor = driverSnapshot.data()!["carColor"];
+        driverrating = driverSnapshot.data()!["rating"];
+      }
+
       // Save the trip details to Firestore
       await newTripRef.set({
         'postuserId': userId,
@@ -85,6 +99,17 @@ class _PostTripForDriversState extends State<PostTripForDrivers> {
         'time': timeTextEditingController.text,
         'seats': _convertToInt(seatsTextEditingController.text),
         'pricePerSeat': priceTextEditingController.text,
+        'DriverName' : driverName,
+        'DriveImg': driveImg,
+        'DriverCarColor': drivercarcolor,
+        'DriverRating' : driverrating,
+        'DriverID' : getCurrentUserId(),
+        'User 1 ID': null,
+        'User 2 ID': null,
+        'User 3 ID': null,
+        'User 1 Seats': null,
+        'User 2 Seats': null,
+        'User 3 Seats': null,
       });
 
       // Optionally, you can clear the form fields after submitting

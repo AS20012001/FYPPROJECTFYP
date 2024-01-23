@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'Active_Trips.dart';
+import 'Chatlist.dart';
+import 'Current_Active_Rides.dart';
 import 'Wheretogo.dart';
 import 'firebase_utils.dart'; // Import your utility functions and classes
-import 'package:flutter/material.dart';
-import '/HomePage.dart';
 import '/MyDrawer.dart';
 import '/Profile/ProfilePage.dart';
 import '/Rides/Logout.dart';
@@ -11,7 +12,6 @@ import '/Rides/Ride.dart';
 import '/Rides/User.dart';
 import '/PostTripforDriver/post_Trip_For_Driver.dart';
 import '/Rides/ChatPage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class CommonDrawer extends StatelessWidget {
   @override
@@ -55,7 +55,7 @@ class CommonDrawer extends StatelessWidget {
                                 backgroundImage: userData.imageUrl.isNotEmpty
                                     ? NetworkImage(userData.imageUrl)
                                     : AssetImage('images/profille.jpg')
-                                        as ImageProvider,
+                                as ImageProvider,
                               ),
                             ),
                             const SizedBox(height: 3),
@@ -99,56 +99,29 @@ class CommonDrawer extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  title: const Text("Rides", style: TextStyle(fontSize: 17)),
-                  leading: Icon(Icons.directions_car),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (c) => Ridepage(date: '', destination: '',)));
-                  },
-                ),
-                ListTile(
-                  title: const Text("Users", style: TextStyle(fontSize: 17)),
-                  leading: Icon(Icons.directions_car),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (c) => UserProfilePage()));
-                  },
-                ),
-                ListTile(
                   title: const Text("Chat", style: TextStyle(fontSize: 17)),
                   leading: Icon(Icons.home),
                   onTap: () {
                     Navigator.push(
-                        context, MaterialPageRoute(builder: (c) => ChatPage()));
+                        context, MaterialPageRoute(builder: (c) => ChatPage(id: '')));
                   },
                 ),
                 ListTile(
-                  title: const Text("Ratings", style: TextStyle(fontSize: 17)),
-                  leading: Icon(Icons.local_taxi),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (c) => Ratings()));
-                  },
-                ),
-                ListTile(
-                  title: Text("Logout", style: TextStyle(fontSize: 17)),
+                  title: Text("Active Trips", style: TextStyle(fontSize: 17)),
                   leading: Icon(Icons.logout),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.push(
-                        context, MaterialPageRoute(builder: (c) => WhereToGo()));
+                        context, MaterialPageRoute(builder: (c) => ActiveTripsPage()));
                   },
                 ),
                 ListTile(
-                  title: Text("Active Rides", style: TextStyle(fontSize: 17)),
+                  title: Text("ChatsList", style: TextStyle(fontSize: 17)),
                   leading: Icon(Icons.logout),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.push(
-                        context, MaterialPageRoute(builder: (c) => WhereToGo()));
+                        context, MaterialPageRoute(builder: (c) => ChatListPage(userId: getCurrentUserId() ,)));
                   },
                 ),
                 // ... add other ListTiles as needed

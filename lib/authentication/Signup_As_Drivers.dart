@@ -43,6 +43,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Future<void> saveUserDataToFirestore(String userId, String imageUrl) async {
     CollectionReference drivers = FirebaseFirestore.instance.collection('drivers');
 
+
     await drivers.doc(userId).set({
       'name': nameTextEditingController.text,
       'email': emailTextEditingController.text,
@@ -52,6 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       'carNumber': CarNumberTextEditingController.text,
       'carColor': CarColorTextEditingController.text,
       'rating': 5,
+      "img_url":imageUrl,
     });
   }
 
@@ -92,7 +94,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     String imageUrl = await uploadImageToFirebaseStorage();
 
     // Save user data (including image URL) to Firestore
-    await saveUserDataToFirestore(getCurrentUserId(), imageUrl);
+    await saveUserDataToFirestore(getCurrentUserId(), imageUrl).then((value) {
+    FirebaseAuth.instance.currentUser!.updateDisplayName(nameTextEditingController.text);
+    FirebaseAuth.instance.currentUser!.updatePhotoURL(imageUrl);
+  });
   }
 
   final _formKey = GlobalKey<FormState>();

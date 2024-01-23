@@ -30,16 +30,8 @@ Future<UserData> getUserDataFromFirestore(String userId) async {
         userData.name = data['name'] ?? '';
         userData.email = data['email'] ?? '';
         userData.phone = data['phone'] ?? '';
+        userData.imageUrl = data['img_url'] ?? '';
       }
-
-      // Fetch image URL from Firebase Storage
-      final firebase_storage.Reference storageReference =
-      firebase_storage.FirebaseStorage.instance
-          .ref()
-          .child('drivers') // Change to your storage folder name
-          .child('$userId.jpg');
-
-      userData.imageUrl = await storageReference.getDownloadURL();
     }
   } catch (e) {
     print("Error fetching user data: $e");
